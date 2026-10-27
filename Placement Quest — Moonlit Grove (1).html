@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Placement Quest — Moonlit Grove</title>
+<style>
+:root{color-scheme:dark;--ink:#eaf6ee;--mut:#9fbcb0;--gold:#f5d37a;--mint:#7ee0b0;--rose:#ff9fa8;--glass:rgba(12,32,38,.6);--line:rgba(190,240,215,.17);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#0b1f26;min-height:100vh}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:-1}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer;border:0}
+.shell{display:grid;grid-template-columns:210px 1fr;gap:18px;max-width:1150px;margin:auto;padding:18px}
+.side{position:sticky;top:18px;align-self:start;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:24px;background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line)}
+.brand{display:flex;gap:8px;align-items:center;margin-bottom:8px}.brand span{font-size:1.7rem}
+.side button{display:flex;align-items:center;gap:10px;background:none;padding:11px 12px;border-radius:14px;font-weight:800}
+.side button.on{background:linear-gradient(135deg,#2f8a67,#1f6a58);box-shadow:0 0 18px #3fbf8f55}
+.xpbox{margin-top:8px;padding:10px;border-radius:14px;background:#ffffff12;font-size:.85rem;color:var(--gold)}
+.screen{display:none}.screen.on{display:block;animation:in .35s}@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.card{background:var(--glass);backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 12px 34px #0005}
+h1{font-size:clamp(1.6rem,5vw,2.4rem);margin:2px 0;letter-spacing:-.03em}h2{margin:8px 0 12px;font-size:1.2rem;line-height:1.35}h3{margin:0 0 8px}
+.mut{color:var(--mut)}.kick{color:var(--mint);font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:.72rem}
+.hd{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:14px}.nm{display:flex;gap:6px}
+input,select{background:#ffffff14;border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;margin:4px 0 12px}.nm input{margin:0;width:150px}
+.btn,.btn2{border-radius:14px;padding:11px 18px;font-weight:900;color:#10321f;background:linear-gradient(135deg,#ffe08a,#f0b45c);box-shadow:0 4px 0 #a5702f}.btn2{background:#ffffff1c;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+.btn:active{transform:translateY(2px)}.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.pill{background:#ffffff1a;border-radius:99px;padding:6px 12px;font-weight:800;font-size:.85rem}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chips span{background:#ffffff14;border-radius:99px;padding:6px 11px;font-size:.82rem;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.g2 .card{margin:0}.g2{margin-bottom:14px}
+.prof{display:flex;gap:16px;align-items:center}.ring{--p:0;flex:none;width:92px;height:92px;border-radius:50%;background:conic-gradient(var(--gold) calc(var(--p)*1%),#ffffff1f 0);display:grid;place-items:center}.ring span{width:74px;height:74px;border-radius:50%;background:#10303a;display:grid;place-items:center;font-size:1.7rem;font-weight:900;color:var(--gold)}
+.q{display:flex;align-items:center;gap:10px;padding:7px 0}.q i{font-size:1.4rem;font-style:normal}.q>div{flex:1}.q b{font-size:.9rem}
+.trk,.bar,.hp{height:8px;border-radius:9px;background:#ffffff1c;overflow:hidden;margin:5px 0}.trk u,.bar u,.hp u{display:block;height:100%;background:linear-gradient(90deg,#7ee0b0,#f5d37a);border-radius:9px;transition:width .3s}.hp u{background:linear-gradient(90deg,#ff7b8a,#ffb07a)}
+.map{position:relative;height:260px;margin-top:8px}.map svg{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);background:none;display:flex;flex-direction:column;align-items:center;gap:3px;width:78px}
+.node span{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.7rem;background:radial-gradient(circle,#fff6c9,var(--c));box-shadow:0 0 22px var(--c);transition:transform .2s}.node:hover span{transform:scale(1.14)}
+.node.lock{opacity:.5;filter:grayscale(.6)}.node.cur span{animation:pulse 1.8s infinite}@keyframes pulse{50%{box-shadow:0 0 38px 8px var(--c)}}
+.node small{font-size:.68rem;font-weight:800;line-height:1.1;text-align:center;text-shadow:0 1px 4px #000}.node em{font-size:.65rem;font-style:normal;color:var(--gold)}
+.cta{display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
+.ans{display:grid;gap:8px;margin:10px 0}.ans button{display:flex;gap:10px;align-items:center;text-align:left;background:#ffffff14;border:1px solid var(--line);border-radius:14px;padding:12px}.ans button:hover:not(:disabled){background:#ffffff26}.ans b{background:#ffffff1f;border-radius:8px;padding:2px 8px}
+.ans .ok{background:#2f9a6a88;border-color:#7ee0b0}.ans .no{background:#c4505f77;border-color:var(--rose)}
+pre{background:#0008;border-radius:12px;padding:12px;overflow-x:auto;color:#bff3d8}
+.fb{border-radius:14px;padding:12px;margin:8px 0;font-size:.92rem;line-height:1.5}.fb.g{background:#2f9a6a44}.fb.b{background:#c4505f44}
+.res{text-align:center}.big{font-size:3.4rem}
+.arena{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:12px}.fighter{text-align:center;background:var(--glass);border:1px solid var(--line);border-radius:20px;padding:12px}.av{font-size:3.2rem;display:inline-block}.mid{text-align:center;min-width:90px}
+.f0 .av.hit{animation:lunge0 .6s}.f1 .av.hit{animation:lunge1 .6s}.av.hurt{animation:shake .5s}
+@keyframes lunge0{40%{transform:translateX(50px) scale(1.2)}}@keyframes lunge1{40%{transform:translateX(-50px) scale(1.2)}}@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.opt{padding:10px 12px;border-radius:12px;background:#ffffff12;margin:6px 0;display:flex;gap:8px}.opt.ok{background:#2f9a6a88}
+.pk{display:flex;align-items:center;gap:6px;margin:6px 0}.pk span{flex:1;font-weight:800;font-size:.85rem}.pk button{width:46px;height:46px;border-radius:12px;background:#ffffff1a;font-weight:900;line-height:1}.pk small{display:block;font-size:.55rem;opacity:.6}.pk button.sel{background:var(--gold);color:#10321f}.pk button:disabled:not(.sel){opacity:.4}
+.seg{display:flex;gap:6px;margin-bottom:12px}.seg button{flex:1;padding:11px;border-radius:12px;background:#ffffff12;font-weight:800}.seg .on{background:#2f8a67}
+.lb{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:12px}.lb.me{background:#f5d37a22;border:1px solid #f5d37a66}.lb b:first-child{width:26px}.lb i{font-style:normal;font-size:1.4rem}.lb span{flex:1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}.stats div{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:14px;text-align:center}.stats b{display:block;font-size:1.6rem;color:var(--gold)}.stats small{color:var(--mut)}
+.bd{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}.bd div{text-align:center;padding:10px;border-radius:14px;background:#ffffff10;opacity:.45;font-size:.78rem}.bd .got{opacity:1;background:#f5d37a22}.bd i{display:block;font-size:1.8rem;font-style:normal}
+#toast{position:fixed;left:50%;bottom:100px;transform:translateX(-50%);background:#10303a;border:1px solid var(--line);padding:10px 16px;border-radius:14px;opacity:0;transition:.3s;pointer-events:none;z-index:20}#toast.show{opacity:1}
+@media(max-width:800px){.shell{display:block;padding:12px 12px 96px}.side{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));top:auto;flex-direction:row;justify-content:space-around;z-index:9;padding:6px}.brand,.xpbox{display:none}.side button{flex-direction:column;gap:2px;font-size:.72rem;padding:8px 16px}.g2{grid-template-columns:1fr}.g2 .card{margin-bottom:14px}.stats{grid-template-columns:1fr 1fr}.arena{grid-template-columns:1fr 1fr}.mid{grid-column:1/-1;order:-1}.nm input{width:110px}}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div class="shell">
+<nav class="side"><div class="brand"><span>🏰</span><b>Placement Quest</b></div>
+<button data-go="home" class="on"><i>🗺️</i><span>Realms</span></button>
+<button data-go="score"><i>🏆</i><span>Scores</span></button>
+<button data-go="duel"><i>⚔️</i><span>Duel</span></button>
+<div class="xpbox">✨ <b id="tx">0</b> XP · <span id="tl">Lv 1</span></div></nav>
+<main><section id="home" class="screen on"></section><section id="quiz" class="screen"></section><section id="score" class="screen"></section><section id="duel" class="screen"></section></main>
+</div><div id="toast"></div>
+<script>
+const worlds=[
+{id:'java',name:'Whispering Woods',subtitle:'Java Grove',icon:'🌳',pale:'#d9edc9',color:'#4c965e',desc:'Awaken the ancient Java tree with logic spells.',chapter:'Chapter I · The First Spell',boss:'The Null Warden',questions:[
+{q:'Which keyword creates a new object in Java?',code:'',a:['make','new','class','this'],correct:1,why:'The new keyword creates an object and calls its constructor.'},
+{q:'What is printed by this code?',code:'int leaves = 3;\\nSystem.out.println(leaves + 2);',a:['32','5','leaves + 2','Error'],correct:1,why:'The variable contains 3, so 3 + 2 gives 5.'},
+{q:'Which type stores whole numbers like 42?',a:['String','boolean','int','char'],correct:2,why:'int is used for whole-number values.'},
+{q:'Which method is the usual Java program entry point?',code:'public static void main(String[] args)',a:['start()','main()','runNow()','begin()'],correct:1,why:'Java starts an application by calling the main method with this signature.'},
+{q:'What does a for loop help you do?',a:['Repeat instructions','Create a folder','Style a webpage','Store only text'],correct:0,why:'Loops repeat a block of code while a condition or iteration rule allows it.'},
+{q:'Which symbol ends most Java statements?',a:[':',';','!','?'],correct:1,why:'Most Java statements end with a semicolon.'}]},
+{id:'sql',name:'Crystal River',subtitle:'SQL Waters',icon:'🏞️',pale:'#d0edf0',color:'#368e9b',desc:'Find hidden data crystals beneath a clear river.',chapter:'Chapter II · River of Records',boss:'The Query Serpent',questions:[
+{q:'Which SQL command reads data from a table?',a:['GET','SELECT','OPEN','READ'],correct:1,why:'SELECT retrieves rows and columns from one or more tables.'},
+{q:'Which clause filters rows?',code:'SELECT * FROM students\\n_____ marks > 80;',a:['ORDER BY','WHERE','GROUP','INTO'],correct:1,why:'WHERE keeps only rows that satisfy a condition.'},
+{q:'What is a primary key used for?',a:['Unique row identification','Coloring a table','Sorting every column','Deleting duplicates automatically'],correct:0,why:'A primary key uniquely identifies each record in a table.'},
+{q:'Which command adds a new row?',a:['INSERT INTO','ADD ROW','UPDATE TABLE','NEW RECORD'],correct:0,why:'INSERT INTO adds a new record to a table.'},
+{q:'Which SQL function counts rows?',a:['SUM()','COUNT()','TOTAL()','NUMBER()'],correct:1,why:'COUNT() returns the number of rows or non-NULL values depending on its argument.'},
+{q:'Which clause sorts results?',a:['SORT','ORDER BY','ARRANGE','SEQUENCE'],correct:1,why:'ORDER BY sorts result rows by one or more columns.'}]},
+{id:'web',name:'Sunbeam Canopy',subtitle:'Webcraft Glade',icon:'🌼',pale:'#fae8bb',color:'#b78032',desc:'Repair enchanted portals using web technologies.',chapter:'Chapter III · The Living Portal',boss:'The Broken Browser',questions:[
+{q:'Which language gives a webpage its structure?',a:['HTML','SQL','Java','Python only'],correct:0,why:'HTML describes the structure and content of a webpage.'},
+{q:'Which technology styles colors, spacing and layout?',a:['HTML','CSS','SQL','Git'],correct:1,why:'CSS controls how HTML content looks.'},
+{q:'Which tag creates a hyperlink?',code:'<a href="https://example.com">Visit</a>',a:['<linkto>','<a>','<href>','<url>'],correct:1,why:'The anchor element <a> creates links; href gives the destination.'},
+{q:'JavaScript is commonly used to add…',a:['Interactivity','Database tables only','Computer hardware','Only page structure'],correct:0,why:'JavaScript can respond to clicks, update content and power web applications.'},
+{q:'What does responsive design mean?',a:['Fits different screen sizes','Only works on laptops','Always uses red','Loads without HTML'],correct:0,why:'Responsive design adapts the layout to phones, tablets and larger screens.'},
+{q:'Which attribute describes an image source?',code:'<img src="flower.png" alt="Flower">',a:['href','src','target','action'],correct:1,why:'The src attribute specifies the image file or URL.'}]},
+{id:'dsa',name:'Mossy Labyrinth',subtitle:'Algorithm Hollow',icon:'🍄',pale:'#e7dfc4',color:'#7c8e4b',desc:'Navigate puzzles and find the shortest path through logic.',chapter:'Chapter IV · Maze of Logic',boss:'The Recursive Golem',questions:[
+{q:'Which structure follows First In, First Out (FIFO)?',a:['Stack','Queue','Tree','Graph'],correct:1,why:'A queue removes items in the same order they were added.'},
+{q:'What is the index of the first element in a Java array?',a:['0','1','-1','It changes randomly'],correct:0,why:'Java arrays use zero-based indexing.'},
+{q:'Which search works efficiently on a sorted array by halving the search range?',a:['Linear search','Binary search','Random search','Depth-only search'],correct:1,why:'Binary search repeatedly halves the sorted search interval.'},
+{q:'What does an algorithm describe?',a:['Step-by-step solution','A screen color','A keyboard brand','A file extension'],correct:0,why:'An algorithm is a finite sequence of steps to solve a problem.'},
+{q:'Which structure uses Last In, First Out (LIFO)?',a:['Queue','Stack','Queue and stack equally','Table'],correct:1,why:'A stack removes the most recently added item first.'},
+{q:'What is a common purpose of sorting?',a:['Arrange data in order','Encrypt every password','Make data disappear','Create a network cable'],correct:0,why:'Sorting arranges values according to a rule, such as ascending order.'}]},
+{id:'career',name:'Sky Castle Academy',subtitle:'Placement Summit',icon:'🏰',pale:'#e8daf4',color:'#8662a8',desc:'Prove your skills to the guardians of the hiring guild.',chapter:'Chapter V · The Open Gate',boss:'The Interview Dragon',questions:[
+{q:'What is a good first step when answering an interview question?',a:['Listen carefully and clarify if needed','Interrupt quickly','Guess without thinking','Read a script without context'],correct:0,why:'Understanding the question helps you give a relevant, clear answer.'},
+{q:'What does STAR stand for in behavioral interviews?',a:['Situation, Task, Action, Result','Study, Test, Answer, Repeat','Skill, Time, Aim, Review','Start, Talk, Ask, Rest'],correct:0,why:'STAR is a structured way to explain a real example.'},
+{q:'What should a strong project explanation include?',a:['Problem, your contribution, tools and outcome','Only the project title','Only the color scheme','Nothing you learned'],correct:0,why:'Interviewers want to understand what you built, how you contributed and what you learned.'},
+{q:'If you do not know an interview answer, what is best?',a:['Be honest and explain your approach','Invent experience','Blame someone','Stop speaking immediately'],correct:0,why:'Honesty plus a thoughtful approach demonstrates learning ability.'},
+{q:'Which resume bullet is strongest?',a:['Built a student organizer using Java and MySQL','Hardworking person','I like computers','Need a job'],correct:0,why:'Specific projects and technologies make skills easier to evaluate.'},
+{q:'What should you do after a technical interview?',a:['Reflect on questions and revise gaps','Forget all questions','Delete your resume','Never practice again'],correct:0,why:'Reviewing the interview helps you identify what to improve.'}]}
+];
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const BD=[{id:'first',i:'🌱',n:'First Footstep',d:'Finish a mission',t:s=>s.done>=1},{id:'think',i:'🧠',n:'Forest Thinker',d:'10 correct answers',t:s=>s.correct>=10},{id:'lore',i:'📚',n:'Lore Keeper',d:'Complete 5 missions',t:s=>s.done>=5},{id:'streak',i:'🔥',n:'Bright Streak',d:'4 right in a row',t:s=>s.bestRun>=4},{id:'duel',i:'⚔️',n:'Duel Victor',d:'Win a Spirit Duel',t:s=>s.duel.w>=1},{id:'gem',i:'💎',n:'Crystal Collector',d:'Earn 250 XP',t:s=>s.xp>=250}];
+const BOTS=[{n:'Byte the Sprite',e:'🧚',x:540},{n:'Luna',e:'🦉',x:410},{n:'Kai',e:'🦊',x:300},{n:'Mira',e:'🐉',x:180}];
+const KEY='placementQuestWildSave',def=()=>({name:'Adventurer',xp:0,done:0,correct:0,bestRun:0,rivalWins:0,unlocked:['java'],completed:{},badges:[],stats:{},log:[],duel:{w:0,l:0,d:0},td:null});
+let S;try{S=Object.assign(def(),JSON.parse(localStorage.getItem(KEY)||'{}'));S.duel=S.duel||{w:0,l:0,d:0}}catch(e){S=def()}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}hdr()},lv=()=>Math.floor(S.xp/100)+1,ttl=()=>S.xp>=300?'Guardian of the Grove':S.xp>=100?'Trailblazer':'Apprentice Explorer';
+const hdr=()=>{$('tx').textContent=S.xp;$('tl').textContent='Lv '+lv()};
+const td=()=>{const d=new Date().toISOString().slice(0,10);if(!S.td||S.td.d!==d)S.td={d,c:0,m:0,x:0,k:{}};return S.td};
+const award=(p,r)=>{S.xp+=p;td().x+=p;if(r){S.correct++;td().c++}},chk=()=>BD.filter(b=>!S.badges.includes(b.id)&&b.t(S)).map(b=>(S.badges.push(b.id),b));
+let tmr;const toast=m=>{const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tmr);tmr=setTimeout(()=>t.classList.remove('show'),2400)};
+let tm,dt,Wd,Q,qi,ok,run,gain,locked,tl,D,dm='f',cfg;
+const prep=q=>{const o=shuffle(q.a.map((_,i)=>i));return{q:q.q,code:q.code,o:o.map(i=>q.a[i]),c:o.indexOf(q.correct),why:q.why}};
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.querySelectorAll('.side button').forEach(b=>b.classList.toggle('on',b.dataset.go===id));clearInterval(tm);clearInterval(dt);D=null;if(id==='home')rHome();if(id==='score')rScore();if(id==='duel')dSetup();scrollTo(0,0)}
+document.querySelectorAll('.side button').forEach(b=>b.onclick=()=>go(b.dataset.go));
+function setName(){const v=$('pn').value.trim();if(v){S.name=v.slice(0,20);save();rHome();toast('Profile saved 🌿')}}
+function claim(id){td().k[id]=1;S.xp+=15;save();rHome();toast('Quest claimed: +15 XP ✨')}
+function rHome(){const t=td(),L=lv(),p=S.xp%100,n=worlds.length,P=worlds.map((w,i)=>[(i+.5)/n*100,i%2?28:66]);
+const QS=[['a','🍃','Get 3 answers right',t.c,3],['m','📜','Finish a mission or duel',t.m,1],['x','✨','Earn 40 XP today',t.x,40]];
+const path='M'+P[0].join(' ')+P.slice(1).map((q,i)=>{const a=P[i],m=(a[0]+q[0])/2;return`C${m} ${a[1]} ${m} ${q[1]} ${q[0]} ${q[1]}`}).join('');
+const cur=worlds.map(w=>w.id).filter(id=>S.unlocked.includes(id)).pop();
+$('home').innerHTML=`<header class="hd"><div><div class="kick">Welcome back</div><h1>${esc(S.name)}’s Journey</h1></div><div class="nm"><input id="pn" maxlength="20" placeholder="Your name" value="${S.name==='Adventurer'?'':esc(S.name)}"><button class="btn" onclick="setName()">Save</button></div></header>
+<div class="g2"><div class="card prof"><div class="ring" style="--p:${p}"><span>${L}</span></div><div><h3>${ttl()}</h3><p class="mut" style="margin:0 0 8px">${p}/100 XP to level ${L+1}</p><div class="chips"><span>🎯 ${S.done} missions</span><span>🧠 ${S.correct} right</span><span>🏅 ${S.badges.length}/${BD.length}</span></div></div></div>
+<div class="card"><h3>Daily quests</h3>${QS.map(([id,ic,tx,v,m])=>{const k=t.k[id],c=Math.min(v,m);return`<div class="q"><i>${k?'✅':ic}</i><div><b>${tx}</b><div class="bar"><u style="width:${c/m*100}%"></u></div></div>${k?'':c>=m?`<button class="btn" onclick="claim('${id}')">+15</button>`:`<small class="mut">${c}/${m}</small>`}</div>`}).join('')}</div></div>
+<div class="card"><div class="row"><h3>Realm map</h3><span class="mut">Tap a glowing realm to begin</span></div><div class="map"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${path}" fill="none" stroke="#f5d37a" stroke-opacity=".6" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>${worlds.map((w,i)=>`<button class="node ${S.unlocked.includes(w.id)?'':'lock'} ${w.id===cur?'cur':''}" style="left:${P[i][0]}%;top:${P[i][1]}%;--c:${w.color}" onclick="startWorld('${w.id}')"><span>${S.unlocked.includes(w.id)?w.icon:'🔒'}</span><small>${w.name}</small><em>${S.completed[w.id]||0}✓</em></button>`).join('')}</div></div>
+<div class="card cta" onclick="go('duel')"><div><h3>⚔️ Spirit Duel</h3><span class="mut">Face a friend on one device, or race Byte the Sprite.</span></div><button class="btn">Play →</button></div>`}
+function startWorld(id){const w=worlds.find(x=>x.id===id);if(!S.unlocked.includes(id))return toast('Get 3+ right in the previous realm to unlock 🔒');Wd=w;Q=shuffle(w.questions).slice(0,5).map(prep);qi=0;ok=0;run=0;gain=0;go('quiz');ask()}
+function ask(){const q=Q[qi];locked=false;tl=20;$('quiz').innerHTML=`<div class="card"><div class="row"><b>${Wd.icon} ${Wd.name}</b><span class="pill">✨ ${gain} pts</span></div><div class="trk"><u id="tb" style="width:100%"></u></div><small class="mut">Question ${qi+1}/${Q.length} · ${esc(Wd.boss)} awaits</small><h2>${esc(q.q)}</h2>${q.code?`<pre>${esc(q.code.replace(/\\n/g,'\n'))}</pre>`:''}<div class="ans">${q.o.map((o,i)=>`<button onclick="pick(${i})"><b>${'ABCD'[i]}</b>${esc(o)}</button>`).join('')}</div><div id="fb"></div></div>`;clearInterval(tm);tm=setInterval(()=>{tl-=.1;$('tb').style.width=Math.max(0,tl/20*100)+'%';if(tl<=0)pick(-1)},100)}
+function pick(i){if(locked)return;locked=true;clearInterval(tm);const q=Q[qi],r=i===q.c,p=r?10+Math.ceil(tl/2):0;
+document.querySelectorAll('.ans button').forEach((b,j)=>{b.disabled=true;if(j===q.c)b.classList.add('ok');else if(j===i)b.classList.add('no')});
+const st=S.stats[Wd.id]||(S.stats[Wd.id]={r:0,t:0});st.t++;if(r){st.r++;ok++;run++;S.bestRun=Math.max(S.bestRun,run);gain+=p;award(p,1);burst(innerWidth/2,innerHeight/2)}else run=0;
+$('fb').innerHTML=`<div class="fb ${r?'g':'b'}">${r?'✨ Correct! +'+p+' ':i<0?'⌛ Time’s up. ':'🌱 Not quite. '}${esc(q.why)}</div><button class="btn" onclick="nxt()">${qi<Q.length-1?'Next →':'Finish'}</button>`;save()}
+function nxt(){if(qi<Q.length-1){qi++;ask()}else fin()}
+function fin(){S.done++;td().m++;S.completed[Wd.id]=(S.completed[Wd.id]||0)+1;const x=worlds.indexOf(Wd),nx=worlds[x+1];let un='';if(ok>=3&&nx&&!S.unlocked.includes(nx.id)){S.unlocked.push(nx.id);un=`<div class="fb g">🗺️ New realm unlocked: ${nx.name}!</div>`}
+S.log.unshift({k:'Solo',t:Wd.name,s:gain+' pts',r:ok+'/'+Q.length,d:Date.now()});S.log=S.log.slice(0,15);const nb=chk();save();
+$('quiz').innerHTML=`<div class="card res"><div class="big">${ok>=3?'🌟':'🌱'}</div><h2>${ok>=3?'The realm shines again!':'A brave attempt!'}</h2><div class="chips" style="justify-content:center"><span>+${gain} pts</span><span>${ok}/${Q.length} correct</span></div>${un}${nb.map(b=>`<p>${b.i} Badge unlocked: <b>${b.n}</b></p>`).join('')}<div class="acts" style="justify-content:center"><button class="btn" onclick="startWorld('${Wd.id}')">Replay</button><button class="btn2" onclick="go('score')">Scoreboard</button><button class="btn2" onclick="go('home')">Map</button></div></div>`;burst(innerWidth/2,200)}
+function rScore(){const a=Object.values(S.stats).reduce((o,s)=>({r:o.r+s.r,t:o.t+s.t}),{r:0,t:0}),acc=a.t?Math.round(a.r/a.t*100):0,rows=[...BOTS,{n:S.name+' (you)',e:'🧙🏻‍♀️',x:S.xp,me:1}].sort((p,q)=>q.x-p.x),dd=S.duel;
+$('score').innerHTML=`<header class="hd"><div><div class="kick">Hall of heroes</div><h1>Scoreboard</h1></div></header>
+<div class="stats"><div><b>${S.xp}</b><small>Total XP</small></div><div><b>${lv()}</b><small>Level</small></div><div><b>${acc}%</b><small>Accuracy</small></div><div><b>${S.bestRun}</b><small>Best streak</small></div></div>
+<div class="g2"><div class="card"><h3>🏆 Leaderboard</h3><small class="mut">Practice rivals vs. you</small>${rows.map((r,i)=>`<div class="lb ${r.me?'me':''}"><b>${['🥇','🥈','🥉'][i]||i+1}</b><i>${r.e}</i><span>${esc(r.n)}</span><b>${r.x}</b></div>`).join('')}</div>
+<div class="card"><h3>⚔️ Duel record</h3><div class="chips"><span>✅ ${dd.w} wins</span><span>❌ ${dd.l} losses</span><span>🤝 ${dd.d} draws</span></div><h3 style="margin-top:16px">Realm mastery</h3>${worlds.map(w=>{const s=S.stats[w.id]||{r:0,t:0},p=s.t?Math.round(s.r/s.t*100):0;return`<div><small>${w.icon} ${w.name} · ${p}%</small><div class="bar"><u style="width:${p}%"></u></div></div>`}).join('')}</div></div>
+<div class="card"><h3>Recent battles</h3>${S.log.length?S.log.slice(0,8).map(l=>`<div class="lb"><i>${l.k==='Duel'?'⚔️':'📜'}</i><span>${esc(l.t)}<br><small class="mut">${new Date(l.d).toLocaleDateString()}</small></span><span style="text-align:right">${esc(l.s)}<br><small class="mut">${esc(l.r)}</small></span></div>`).join(''):'<p class="mut">Play a mission or duel to fill this page.</p>'}</div>
+<div class="card"><h3>Badges</h3><div class="bd">${BD.map(b=>`<div class="${S.badges.includes(b.id)?'got':''}"><i>${b.i}</i><b>${b.n}</b><br>${b.d}</div>`).join('')}</div></div>`}
+function dMode(m){dm=m;dSetup()}
+function dSetup(){D=null;$('duel').innerHTML=`<header class="hd"><div><div class="kick">Two players · one screen</div><h1>⚔️ Spirit Duel</h1></div></header><div class="card"><p class="mut" style="margin-top:0">Both players get the same question. Right answers wound the rival’s spirit — faster answers hit harder.</p><div class="seg"><button class="${dm==='f'?'on':''}" onclick="dMode('f')">👫 Friend</button><button class="${dm==='b'?'on':''}" onclick="dMode('b')">🧚 Byte the Sprite</button></div><label>Player 1<input id="n1" maxlength="14" value="${esc(S.name)}"></label>${dm==='f'?'<label>Player 2<input id="n2" maxlength="14" value="Player 2"></label>':''}<label>Realm<select id="rw"><option value="all">🌍 All realms mixed</option>${worlds.map(w=>`<option value="${w.id}">${w.icon} ${w.name}</option>`).join('')}</select></label><button class="btn" onclick="dStart()">Start duel</button><p class="mut"><small>Keys — Player 1: 1 2 3 4 · Player 2: 7 8 9 0 (or tap the letters)</small></p></div>`}
+function dStart(){const r=$('rw').value;cfg={n:[$('n1').value.trim()||'Player 1',dm==='b'?'Byte':($('n2').value.trim()||'Player 2')],bot:dm==='b',pool:r==='all'?worlds.flatMap(w=>w.questions):worlds.find(w=>w.id===r).questions};dNew()}
+function dNew(){D={n:cfg.n,av:['🧙🏻‍♀️',cfg.bot?'🧚':'🦊'],sc:[0,0],hp:[100,100],qs:shuffle(cfg.pool).slice(0,5).map(prep),i:-1,bot:cfg.bot};dRound()}
+function dRound(){D.i++;if(D.i>=D.qs.length)return dEnd();const q=D.qs[D.i],r=D.i,K=[['1','2','3','4'],['7','8','9','0']];D.a=[null,null];D.tl=15;D.rv=false;
+$('duel').innerHTML=`<div class="arena">${[0,1].map(p=>`<div class="fighter f${p}"><div class="av" id="av${p}">${D.av[p]}</div><br><b>${esc(D.n[p])}</b><div class="hp"><u id="h${p}" style="width:${D.hp[p]}%"></u></div><small id="s${p}">${D.sc[p]} pts</small></div>`).join('').replace('</div></div><div class="fighter f1"','</div></div><div class="mid"><span class="pill">Round ${r+1}/${D.qs.length}</span><div class="trk"><u id="tb" style="width:100%"></u></div></div><div class="fighter f1"')}</div>
+<div class="card"><h2 style="margin-top:0">${esc(q.q)}</h2>${q.code?`<pre>${esc(q.code.replace(/\\n/g,'\n'))}</pre>`:''}${q.o.map((o,i)=>`<div class="opt" id="o${i}"><b>${'ABCD'[i]}</b>${esc(o)}</div>`).join('')}
+${[0,1].map(p=>`<div class="pk"><span>${esc(D.n[p])}${p&&D.bot?' 🤔':''}</span>${[0,1,2,3].map(i=>`<button data-p="${p}" data-i="${i}" ${p&&D.bot?'disabled':''} onclick="dPick(${p},${i})">${'ABCD'[i]}<small>${K[p][i]}</small></button>`).join('')}</div>`).join('')}<div id="fb"></div></div>`;
+clearInterval(dt);dt=setInterval(()=>{D.tl-=.1;$('tb').style.width=Math.max(0,D.tl/15*100)+'%';if(D.tl<=0)dRev()},100);
+if(D.bot)setTimeout(()=>{if(D&&D.i===r&&!D.rv)dPick(1,Math.random()<.7?q.c:Math.floor(Math.random()*4),1)},1500+Math.random()*6000)}
+function dPick(p,i,bot){if(!D||D.rv||D.a[p]||(p&&D.bot&&!bot))return;D.a[p]={i,t:D.tl};document.querySelectorAll(`.pk button[data-p="${p}"]`).forEach(b=>{b.disabled=true;if(+b.dataset.i===i)b.classList.add('sel')});if(D.a[0]&&D.a[1])dRev()}
+function dRev(){if(D.rv)return;D.rv=true;clearInterval(dt);const q=D.qs[D.i],pts=[0,1].map(p=>D.a[p]&&D.a[p].i===q.c?10+Math.ceil(D.a[p].t/3):0);
+if(pts[0]&&pts[1]){if(D.a[0].t>D.a[1].t)pts[0]+=3;else if(D.a[1].t>D.a[0].t)pts[1]+=3}
+[0,1].forEach(p=>{D.sc[p]+=pts[p];D.hp[1-p]=Math.max(0,D.hp[1-p]-pts[p]*1.6);if(pts[p]){$('av'+p).classList.add('hit');$('av'+(1-p)).classList.add('hurt')}$('s'+p).textContent=D.sc[p]+' pts';$('h'+(1-p)).style.width=D.hp[1-p]+'%'});
+if(pts[0])award(pts[0],1);$('o'+q.c).classList.add('ok');document.querySelectorAll('.pk button').forEach(b=>b.disabled=true);
+$('fb').innerHTML=`<div class="fb ${pts[0]||pts[1]?'g':'b'}">${esc(D.n[0])}: +${pts[0]} · ${esc(D.n[1])}: +${pts[1]}<br>${esc(q.why)}</div><button class="btn" onclick="dRound()">${D.i<D.qs.length-1?'Next round →':'See result'}</button>`;save()}
+function dEnd(){const [a,b]=D.sc,w=a>b?0:b>a?1:-1;if(w===0){S.duel.w++;if(D.bot)S.rivalWins++}else if(w===1)S.duel.l++;else S.duel.d++;td().m++;
+S.log.unshift({k:'Duel',t:D.n[0]+' vs '+D.n[1],s:a+' – '+b,r:w<0?'Draw':D.n[w]+' won',d:Date.now()});S.log=S.log.slice(0,15);const nb=chk();save();
+$('duel').innerHTML=`<div class="card res"><div class="big">${w<0?'🤝':D.av[w]}</div><h2>${w<0?'A perfect draw!':esc(D.n[w])+' wins the duel!'}</h2><div class="chips" style="justify-content:center"><span>${esc(D.n[0])}: ${a}</span><span>${esc(D.n[1])}: ${b}</span></div>${nb.map(x=>`<p>${x.i} Badge unlocked: <b>${x.n}</b></p>`).join('')}<div class="acts" style="justify-content:center"><button class="btn" onclick="dNew()">Rematch</button><button class="btn2" onclick="go('score')">Scoreboard</button><button class="btn2" onclick="dSetup()">Change setup</button></div></div>`;D=null;burst(innerWidth/2,220)}
+addEventListener('keydown',e=>{if(!D||D.rv||D.i<0)return;const a='1234'.indexOf(e.key),b='7890'.indexOf(e.key);if(a>=0)dPick(0,a);else if(b>=0)dPick(1,b)});
+/* ---- living background ---- */
+const cv=$('bg'),cx=cv.getContext('2d'),RM=matchMedia('(prefers-reduced-motion:reduce)').matches;let vw,vh,mx=.5,my=.5,T=0,fl=[],sp=[],pt=[],stars=[];
+const spr=document.createElement('canvas');spr.width=spr.height=32;{const g=spr.getContext('2d'),r=g.createRadialGradient(16,16,0,16,16,16);r.addColorStop(0,'#fff8c0');r.addColorStop(.25,'#ffe58a99');r.addColorStop(1,'#ffe58a00');g.fillStyle=r;g.fillRect(0,0,32,32)}
+function rs(){vw=cv.width=innerWidth;vh=cv.height=innerHeight;fl=Array.from({length:RM?12:46},()=>({x:Math.random()*vw,y:vh*(.3+Math.random()*.6),vx:0,vy:0,p:Math.random()*6,s:.4+Math.random()}));stars=Array.from({length:90},()=>({x:Math.random(),y:Math.random()*.55,p:Math.random()*6}));pt=Array.from({length:RM?0:16},()=>({x:Math.random()*vw,y:Math.random()*vh,p:Math.random()*6,s:.3+Math.random()}));draw()}
+function burst(x,y){if(RM)return;for(let i=0;i<14;i++){const a=Math.random()*6.28,s=1+Math.random()*3;sp.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,l:1})}}
+addEventListener('pointermove',e=>{mx=e.clientX/vw;my=e.clientY/vh});addEventListener('pointerdown',e=>burst(e.clientX,e.clientY));addEventListener('resize',rs);
+function hill(base,amp,f,col,par,tree){cx.fillStyle=col;cx.beginPath();cx.moveTo(0,vh);const o=(mx-.5)*par;for(let x=0;x<=vw;x+=12)cx.lineTo(x,vh*base+Math.sin((x+o)*f)*amp+Math.sin((x+o)*f*2.3)*amp*.4);cx.lineTo(vw,vh);cx.fill();if(tree){cx.fillStyle=col;for(let x=15;x<vw;x+=46+(x*7%23)){const y=vh*base+Math.sin((x+o)*f)*amp+Math.sin((x+o)*f*2.3)*amp*.4,h=26+(x*13%30);cx.beginPath();cx.moveTo(x+o*0,y-h);cx.lineTo(x-11,y+4);cx.lineTo(x+11,y+4);cx.fill()}}}
+function draw(){T+=.016;const g=cx.createLinearGradient(0,0,0,vh);g.addColorStop(0,'#0a1b3a');g.addColorStop(.55,'#17475a');g.addColorStop(1,'#3f8a72');cx.fillStyle=g;cx.fillRect(0,0,vw,vh);
+stars.forEach(s=>{cx.globalAlpha=.4+.5*Math.sin(T*1.5+s.p);cx.fillStyle='#fff';cx.fillRect(s.x*vw,s.y*vh,1.6,1.6)});cx.globalAlpha=1;
+const mxp=vw*.78-(mx-.5)*20,myp=vh*.16,mg=cx.createRadialGradient(mxp,myp,10,mxp,myp,150);mg.addColorStop(0,'#fff6d0aa');mg.addColorStop(1,'#fff6d000');cx.fillStyle=mg;cx.fillRect(mxp-150,myp-150,300,300);cx.fillStyle='#fff3c4';cx.beginPath();cx.arc(mxp,myp,34,0,6.28);cx.fill();
+cx.globalCompositeOperation='lighter';for(let k=0;k<2;k++){const ag=cx.createLinearGradient(0,vh*.1,0,vh*.5);ag.addColorStop(0,k?'#6a5cff22':'#3effb422');ag.addColorStop(1,'#0000');cx.fillStyle=ag;cx.beginPath();cx.moveTo(0,vh*.5);for(let x=0;x<=vw;x+=20)cx.lineTo(x,vh*(.22+k*.06)+Math.sin(x*.004+T*.5+k*2)*vh*.07);cx.lineTo(vw,vh*.5);cx.fill()}cx.globalCompositeOperation='source-over';
+hill(.62,26,.004,'#1d5a55',30);hill(.72,30,.0055,'#164a4b',60,1);hill(.84,22,.007,'#0f3a3e',110,1);hill(.95,14,.01,'#0a2a2e',180);
+pt.forEach(p=>{p.y+=p.s*.6;p.x+=Math.sin(T+p.p)*.6;if(p.y>vh){p.y=-10;p.x=Math.random()*vw}cx.fillStyle='#ffc9d6aa';cx.beginPath();cx.ellipse(p.x,p.y,4,2,T+p.p,0,6.28);cx.fill()});
+cx.globalCompositeOperation='lighter';fl.forEach(f=>{const dx=mx*vw-f.x,dy=my*vh-f.y,d=Math.hypot(dx,dy);if(d<200&&d>5){f.vx+=dx/d*.02;f.vy+=dy/d*.02}f.vx+=Math.sin(T+f.p)*.01;f.vy+=Math.cos(T*.8+f.p)*.01;f.vx*=.97;f.vy*=.97;f.x=(f.x+f.vx*f.s+vw)%vw;f.y=Math.min(vh,Math.max(vh*.2,f.y+f.vy*f.s));cx.globalAlpha=.55+.45*Math.sin(T*2+f.p);const z=18+6*Math.sin(T+f.p);cx.drawImage(spr,f.x-z/2,f.y-z/2,z,z)});
+sp=sp.filter(s=>s.l>0);sp.forEach(s=>{s.x+=s.vx;s.y+=s.vy;s.vy+=.05;s.l-=.02;cx.globalAlpha=Math.max(0,s.l);cx.drawImage(spr,s.x-8,s.y-8,16,16)});cx.globalAlpha=1;cx.globalCompositeOperation='source-over';
+if(!RM&&!document.hidden)requestAnimationFrame(draw);else if(!RM)setTimeout(draw,500)}
+hdr();rs();rHome();
+</script></body></html>
